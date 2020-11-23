@@ -1,0 +1,45 @@
+function travelTime(input) {
+    let travelingList = {};
+
+    input.forEach(element => {
+        let [countryName, townName, travelCost] = element.split(` > `);
+        if (!travelingList.hasOwnProperty(countryName)) {
+            travelingList[countryName] = {};
+        }
+        let town = travelingList[countryName][townName];
+        if (!town) {
+            travelingList[countryName][townName] = [];
+            town = travelingList[countryName][townName]
+        }
+        town.push(travelCost);
+
+    });
+    let sorted = Object.entries(travelingList);
+    sorted.sort((a, b) => {
+        let first = a[0];
+        let second = b[0];
+        return first.localeCompare(second);
+    });
+
+    sorted.forEach(element => {
+        let [country, townList] = element;
+        let list = Object.entries(townList);
+        list.forEach(element => {
+            let arrElements = element[1];
+            arrElements = arrElements.sort((a, b) => a - b);
+            arrElements.length = 1;
+        });
+        list.sort((a, b) => {
+            let first = a[1];
+            let second = b[1];
+            return first - second;
+        });
+        let toPrint = "";
+        for (let a of list) {
+            let [town, price] = a;
+            toPrint += `${town} -> ${price[0]} `;
+        }
+        console.log(`${country} -> ${toPrint}`);
+    });
+
+}
